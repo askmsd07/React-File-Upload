@@ -8,17 +8,7 @@ class Uploader extends Component {
     // Initially, no file is selected
     selectedFile: null,
     fileData: null,
-    columns: [
-      {
-        title: 'Person',
-        dataIndex: 'person',
-        key: '1'
-      }, {
-        title: 'Color',
-        dataIndex: 'color',
-        key: '2'
-      }
-    ]
+    columns: []
   };
 
   // On file select (from the pop up)
@@ -32,7 +22,14 @@ class Uploader extends Component {
     reader.onload = (evt) => {
       /* Parse data */
       const jsonString = evt.target.result;
-      this.setState({fileData: JSON.parse(jsonString)})
+      let columns = Object.keys(JSON.parse(jsonString)[0]).map((prop, index)=>{
+        return {
+          title: prop.toUpperCase(),
+          dataIndex: prop,
+          key: index
+        }
+      })
+      this.setState({columns, fileData: JSON.parse(jsonString)})
     };
   };
 
